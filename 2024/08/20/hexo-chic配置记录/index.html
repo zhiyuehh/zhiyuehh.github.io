@@ -13,7 +13,7 @@
 
 
 
-<title>wr2024_08_06 | MERCARDER&#39;s glog</title>
+<title>hexo_chic配置记录 | MERCARDER&#39;s glog</title>
 
 
 
@@ -196,7 +196,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">wr2024_08_06</h1>
+            <h1 class="post-title">hexo_chic配置记录</h1>
             
                 <div class="post-meta">
                     
@@ -205,18 +205,34 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">八月 6, 2024&nbsp;&nbsp;16:05:29</a>
+                        Date: <a href="#">八月 20, 2024&nbsp;&nbsp;11:00:20</a>
                         </span>
                     
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/hexo/">hexo</a>
+                            
+                        </span>
                     
                 </div>
             
         </header>
 
         <div class="post-content">
-            <h1 id="workrecord"><a href="#workrecord" class="headerlink" title="workrecord"></a>workrecord</h1><h2 id="part1"><a href="#part1" class="headerlink" title="part1"></a>part1</h2><p>hellow</p>
-<h2 id="part2"><a href="#part2" class="headerlink" title="part2"></a>part2</h2><p>test02</p>
-
+            <h2 id="hexo-Chic主题配置记录"><a href="#hexo-Chic主题配置记录" class="headerlink" title="hexo&amp;Chic主题配置记录"></a>hexo&amp;Chic主题配置记录</h2><p>主要用于记录配置本博客的过程</p>
+<h3 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h3><p>1、Node安装，直接搜索<br>2、git安装，同上<br>3、hexo安装，同上<br>大佬教程：<a target="_blank" rel="noopener" href="https://myoontyee.github.io/article/551b025b.html">https://myoontyee.github.io/article/551b025b.html</a></p>
+<p>** 概念辨析 **<br>博客根目录：使用hexo init创建的目录，进入到里面就是博客根目录<br>Chic主题根目录：进入到博客根目录里面的themes，在这个路径下放置主题根目录，进入Chic目录即为Chic主题根目录</p>
+<h3 id="Chic主题安装"><a href="#Chic主题安装" class="headerlink" title="Chic主题安装"></a>Chic主题安装</h3><p>进入博客目录下面的themes，运行git clone <a target="_blank" rel="noopener" href="https://github.com/Siricee/hexo-theme-Chic.git">https://github.com/Siricee/hexo-theme-Chic.git</a> Chic，下载Chix主题<br>然后在博客根目录下面的_config.yml中设置Chic主题，即theme: Chic</p>
+<h3 id="分类、标签等目录无效的问题"><a href="#分类、标签等目录无效的问题" class="headerlink" title="分类、标签等目录无效的问题"></a>分类、标签等目录无效的问题</h3><p>进入Chic主题目录，打开该目录下的_config.yml<br>可以看到以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># navigatior items</span><br><span class="line">nav:</span><br><span class="line">  Posts: /archives</span><br><span class="line">  Categories: /category</span><br><span class="line">  Tags: /tag</span><br><span class="line">  About: /about</span><br></pre></td></tr></table></figure>
+<p>这代表导航栏有这些项目，并且这些项目有对应的目录<br>例如Categories导航项对应的目录为&#x2F;category，这里指的是博客根目录下面的source下面的category目录，说明我们需要初始化一个category目录，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page category</span><br></pre></td></tr></table></figure>
+<p>通过以上命令会在source目录下初始化一个category目录，并且在里面生成一个index.md，也就是在该目录下会显示的内容，这里注意对这个index.md的设置<br>layout: “category”，注意中间有空格，并且配置一个type字段，这样才能使分类起效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: Categories</span><br><span class="line">date: 2024-08-20 10:44:38</span><br><span class="line">layout: &quot;category&quot;</span><br><span class="line">type: &quot;categories&quot;</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>同理可以设置Tags导航页面，也要设置layout项<br>这里用的layout项实际上是Chic主题下面的layout目录下面所提供的layout布局，打开后可以看到对应的布局<br>About导航创建好后，可以在里面的index.md中直接编写自己的介绍，因为这个布局不会像分类(Categories)、标签(Tags)这两个页面一样直接索引post中相关的内容<br>经过以上设置，博客的框架基本上就形成了，注意在写的每个博客里面加上标签及分类的索引</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: Linux设置邮件提醒</span><br><span class="line">toc: true</span><br><span class="line">date: 2018-05-24 11:00:00</span><br><span class="line">tags:</span><br><span class="line">- linux</span><br><span class="line">- ubuntu</span><br><span class="line">- centos</span><br><span class="line">- mail</span><br><span class="line">categories: </span><br><span class="line">- [专业,测试]</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
         </div>
 
         
@@ -230,7 +246,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://example.com/2024/08/06/wr2024-08-06/">http://example.com/2024/08/06/wr2024-08-06/</a></span>
+                        <span><a href="http://example.com/2024/08/20/hexo-chic%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/">http://example.com/2024/08/20/hexo-chic%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/</a></span>
                     </p>
                 
                 
@@ -253,6 +269,10 @@
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/hexo/"># hexo</a>
+                    
+                        
                 </span>
             </div>
             <div>
@@ -263,10 +283,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2024/08/20/log20240820/">log20240820</a>
             
-            
-            <a class="next" rel="next" href="/2024/08/06/hello-world/">Hello World</a>
+            <a class="next" rel="next" href="/2024/08/20/log20240820-1/">log20240820</a>
             
         </section>
 
