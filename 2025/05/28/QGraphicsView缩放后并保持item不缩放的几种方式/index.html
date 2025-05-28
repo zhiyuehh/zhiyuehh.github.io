@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="MERCARDER">
+
+
+
+
+
+<title>QGraphicsView缩放后并保持item不缩放的几种方式 | MERCARDER&#39;s glog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">MERCARDER&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/About">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">MERCARDER&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/About">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">QGraphicsView缩放后并保持item不缩放的几种方式</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">MERCARDER</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">五月 28, 2025&nbsp;&nbsp;11:07:38</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>一般来说，加入到QGraphicsScene的item会随着view的缩放自动缩放，有些item需要保持自身的大小，例如线条item，如果随着view的缩放，其宽度也会发生变化，这显然是不符合需求的，为了消除view缩放带来的影响，探索了以下三种方式，在view中，item可以始终保持自身缩放比例<br>1、使用 ItemIgnoresTransformations 标志的项<br>2、通过重写 paint 实现逆变换的项<br>3、手动控制缩放的视图<br>以下为示例代码，详细展示了三种控制item缩放的方式</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QApplication&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QGraphicsView&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QGraphicsScene&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QGraphicsRectItem&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QGraphicsEllipseItem&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QWheelEvent&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QLabel&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QVBoxLayout&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QDebug&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 方法1：使用 ItemIgnoresTransformations 标志的项</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FixedSizeItem1</span> : <span class="keyword">public</span> QGraphicsEllipseItem &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">FixedSizeItem1</span>(qreal x, qreal y, qreal w, qreal h, QGraphicsItem* parent = <span class="literal">nullptr</span>)</span><br><span class="line">        : <span class="built_in">QGraphicsEllipseItem</span>(x, y, w, h, parent) &#123;</span><br><span class="line">        <span class="built_in">setFlag</span>(QGraphicsItem::ItemIgnoresTransformations, <span class="literal">true</span>);</span><br><span class="line">        <span class="built_in">setBrush</span>(Qt::red);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方法2：通过重写 paint 实现逆变换的项</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FixedSizeItem2</span> : <span class="keyword">public</span> QGraphicsRectItem &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">FixedSizeItem2</span>(qreal x, qreal y, qreal w, qreal h, QGraphicsItem* parent = <span class="literal">nullptr</span>)</span><br><span class="line">        : <span class="built_in">QGraphicsRectItem</span>(x, y, w, h, parent) &#123;</span><br><span class="line">        <span class="built_in">setBrush</span>(Qt::green);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">paint</span><span class="params">(QPainter* painter, <span class="type">const</span> QStyleOptionGraphicsItem* option, QWidget* widget)</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        painter-&gt;<span class="built_in">save</span>();</span><br><span class="line">        qreal scale = <span class="number">1.0</span> / painter-&gt;<span class="built_in">transform</span>().<span class="built_in">m11</span>();</span><br><span class="line">        painter-&gt;<span class="built_in">scale</span>(scale, scale);</span><br><span class="line">        QGraphicsRectItem::<span class="built_in">paint</span>(painter, option, widget);</span><br><span class="line">        painter-&gt;<span class="built_in">restore</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方法3：手动控制缩放的视图</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CustomGraphicsView</span> : <span class="keyword">public</span> QGraphicsView &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">CustomGraphicsView</span>(QGraphicsScene* scene, QWidget* parent = <span class="literal">nullptr</span>)</span><br><span class="line">        : <span class="built_in">QGraphicsView</span>(scene, parent) &#123;</span><br><span class="line">        <span class="comment">// 创建需要手动控制的固定大小项</span></span><br><span class="line">        manualItem = <span class="keyword">new</span> <span class="built_in">QGraphicsEllipseItem</span>(<span class="number">-15</span>, <span class="number">-15</span>, <span class="number">30</span>, <span class="number">30</span>);</span><br><span class="line">        manualItem-&gt;<span class="built_in">setBrush</span>(Qt::blue);</span><br><span class="line">        scene-&gt;<span class="built_in">addItem</span>(manualItem);</span><br><span class="line">        manualItem-&gt;<span class="built_in">setPos</span>(<span class="number">150</span>, <span class="number">150</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 设置视图缩放相关属性</span></span><br><span class="line">        <span class="built_in">setTransformationAnchor</span>(QGraphicsView::AnchorUnderMouse);</span><br><span class="line">        <span class="built_in">setResizeAnchor</span>(QGraphicsView::AnchorViewCenter);</span><br><span class="line">        <span class="built_in">setDragMode</span>(QGraphicsView::ScrollHandDrag);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">wheelEvent</span><span class="params">(QWheelEvent* event)</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 计算缩放因子 (1.2倍或0.8倍)</span></span><br><span class="line">        qreal scaleFactor = event-&gt;<span class="built_in">angleDelta</span>().<span class="built_in">y</span>() &gt; <span class="number">0</span> ? <span class="number">1.2</span> : <span class="number">1</span>/<span class="number">1.2</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 执行缩放</span></span><br><span class="line">        <span class="built_in">scale</span>(scaleFactor, scaleFactor);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 对需要固定大小的项应用逆缩放</span></span><br><span class="line">        manualItem-&gt;<span class="built_in">setScale</span>(<span class="number">1.0</span> / <span class="built_in">transform</span>().<span class="built_in">m11</span>());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    QGraphicsEllipseItem* manualItem;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span> </span>&#123;</span><br><span class="line">    <span class="function">QApplication <span class="title">app</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建主窗口</span></span><br><span class="line">    QWidget mainWindow;</span><br><span class="line">    QVBoxLayout* layout = <span class="keyword">new</span> <span class="built_in">QVBoxLayout</span>(&amp;mainWindow);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建场景</span></span><br><span class="line">    QGraphicsScene scene;</span><br><span class="line">    scene.<span class="built_in">setSceneRect</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">300</span>, <span class="number">300</span>);</span><br><span class="line">    scene.<span class="built_in">setBackgroundBrush</span>(Qt::lightGray);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加普通可缩放项</span></span><br><span class="line">    QGraphicsRectItem* scalableItem = <span class="keyword">new</span> <span class="built_in">QGraphicsRectItem</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">200</span>, <span class="number">200</span>);</span><br><span class="line">    scalableItem-&gt;<span class="built_in">setBrush</span>(Qt::yellow);</span><br><span class="line">    scene.<span class="built_in">addItem</span>(scalableItem);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加方法1的固定大小项</span></span><br><span class="line">    FixedSizeItem1* fixedItem1 = <span class="keyword">new</span> <span class="built_in">FixedSizeItem1</span>(<span class="number">-15</span>, <span class="number">-15</span>, <span class="number">30</span>, <span class="number">30</span>);</span><br><span class="line">    scene.<span class="built_in">addItem</span>(fixedItem1);</span><br><span class="line">    fixedItem1-&gt;<span class="built_in">setPos</span>(<span class="number">50</span>, <span class="number">50</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加方法2的固定大小项</span></span><br><span class="line">    FixedSizeItem2* fixedItem2 = <span class="keyword">new</span> <span class="built_in">FixedSizeItem2</span>(<span class="number">-15</span>, <span class="number">-15</span>, <span class="number">30</span>, <span class="number">30</span>);</span><br><span class="line">    scene.<span class="built_in">addItem</span>(fixedItem2);</span><br><span class="line">    fixedItem2-&gt;<span class="built_in">setPos</span>(<span class="number">100</span>, <span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建视图</span></span><br><span class="line">    <span class="function">CustomGraphicsView <span class="title">view</span><span class="params">(&amp;scene)</span></span>;</span><br><span class="line">    view.<span class="built_in">setAlignment</span>(Qt::AlignLeft|Qt::AlignTop);</span><br><span class="line">    view.<span class="built_in">setMouseTracking</span>(<span class="literal">true</span>);</span><br><span class="line">    view.<span class="built_in">setRenderHint</span>(QPainter::Antialiasing);</span><br><span class="line">    view.<span class="built_in">setDragMode</span>(QGraphicsView::ScrollHandDrag);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加说明标签</span></span><br><span class="line">    QLabel* label = <span class="keyword">new</span> <span class="built_in">QLabel</span>(</span><br><span class="line">        <span class="string">&quot;使用鼠标滚轮缩放视图:\n&quot;</span></span><br><span class="line">        <span class="string">&quot;红色: ItemIgnoresTransformations\n&quot;</span></span><br><span class="line">        <span class="string">&quot;绿色: 重写paint方法\n&quot;</span></span><br><span class="line">        <span class="string">&quot;蓝色: 手动控制缩放\n&quot;</span></span><br><span class="line">        <span class="string">&quot;黄色: 普通可缩放项&quot;</span>);</span><br><span class="line">    label-&gt;<span class="built_in">setAlignment</span>(Qt::AlignCenter);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置布局</span></span><br><span class="line">    layout-&gt;<span class="built_in">addWidget</span>(label);</span><br><span class="line">    layout-&gt;<span class="built_in">addWidget</span>(&amp;view);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 显示窗口</span></span><br><span class="line">    mainWindow.<span class="built_in">resize</span>(<span class="number">600</span>, <span class="number">600</span>);</span><br><span class="line">    mainWindow.<span class="built_in">show</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> app.<span class="built_in">exec</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>MERCARDER</span>
+                    </p>
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2024 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>惟精惟一，允执厥中</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/QT/"># QT</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/05/28/%E5%88%86%E8%BE%A8%E7%8E%87%E3%80%81%E5%83%8F%E7%B4%A0%E3%80%81dpi%E6%A6%82%E5%BF%B5%E8%BE%A8%E6%9E%90/">分辨率、像素、dpi概念辨析</a>
+            
+            
+            <a class="next" rel="next" href="/2024/08/21/rec20240821/">rec20240821</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© MERCARDER | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
