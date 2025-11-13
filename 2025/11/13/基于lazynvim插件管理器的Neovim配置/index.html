@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="MERCARDER">
+
+
+
+
+
+<title>基于lazynvim插件管理器的Neovim配置 | MERCARDER&#39;s glog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">MERCARDER&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/About">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">MERCARDER&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/About">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">基于lazynvim插件管理器的Neovim配置</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">MERCARDER</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">十一月 13, 2025&nbsp;&nbsp;18:19:36</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/neovim/">neovim</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>基于Lazy.nvim插件管理器的NeoVim配置</p>
+<h4 id="两个基础概念辨析"><a href="#两个基础概念辨析" class="headerlink" title="两个基础概念辨析"></a>两个基础概念辨析</h4><ul>
+<li><code>lazyvim</code>：是一个配置项目，将这个项目clone至指定位置后，会自动按照其中的设定，安装一些插件，属于开箱即用的配置，但是插件较多，如果网络不稳定，用起来比较困难</li>
+<li><code>lazy.nvim</code>：是一个插件管理器，用于配置插件</li>
+</ul>
+<h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4><ul>
+<li><p>配置目录位置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">macOS/Linux：~/.config/nvim </span><br><span class="line">Windows：~/AppData/Local/nvim</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置概述</p>
+<p><code>init.lua</code>内容如下，<code>nvim</code>启动时会加载<code>init.lua</code>配置，然后通过<code>require(&quot;lazynvim-init&quot;)</code>查找当前<code>init.lua</code>所在目录下的<code>lua</code>目录下的<code>lazynvim-init.lua</code>文件，运行其内容。</p>
+<p><strong><code>init.lua</code></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-- bootstrap lazy.nvim</span><br><span class="line">-- ./lua/lazynvim-init.lua</span><br><span class="line">require(&quot;lazynvim-init&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><code>lua</code>文件以<code>--</code>为注释标识</p>
+</li>
+<li><p>插件管理器lazy.nvim配置</p>
+<p><strong><code>lua/lazynvim-init.lua</code></strong></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 1. 准备lazy.nvim模块（存在性检测）</span></span><br><span class="line"><span class="comment">-- stdpath(&quot;data&quot;)</span></span><br><span class="line"><span class="comment">-- macOS/Linux: ~/.local/share/nvim</span></span><br><span class="line"><span class="comment">-- Windows: ~/AppData/Local/nvim-data</span></span><br><span class="line"><span class="keyword">local</span> lazypath = vim.fn.stdpath(<span class="string">&quot;data&quot;</span>) .. <span class="string">&quot;/lazy/lazy.nvim&quot;</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> vim.loop.fs_stat(lazypath) <span class="keyword">then</span></span><br><span class="line">	vim.fn.system(&#123;</span><br><span class="line">		<span class="string">&quot;git&quot;</span>,</span><br><span class="line">		<span class="string">&quot;clone&quot;</span>,</span><br><span class="line">		<span class="string">&quot;--filter=blob:none&quot;</span>,</span><br><span class="line">		<span class="string">&quot;https://github.com/folke/lazy.nvim.git&quot;</span>,</span><br><span class="line">		<span class="string">&quot;--branch=stable&quot;</span>, <span class="comment">-- latest stable release</span></span><br><span class="line">		lazypath,</span><br><span class="line">	&#125;)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">-- </span></span><br><span class="line"><span class="comment">-- 2. 将 lazypath 设置为运行时路径</span></span><br><span class="line"><span class="comment">-- rtp（runtime path）</span></span><br><span class="line"><span class="comment">-- nvim进行路径搜索的时候，除已有的路径，还会从prepend的路径中查找</span></span><br><span class="line"><span class="comment">-- 否则，下面 require(&quot;lazy&quot;) 是找不到的</span></span><br><span class="line">vim.opt.rtp:prepend(lazypath)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 3. 加载lazy.nvim模块</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&quot;lazy&quot;</span>).setup(&#123;&#125;)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="插件安装配置"><a href="#插件安装配置" class="headerlink" title="插件安装配置"></a>插件安装配置</h4><p>插件安装实际上主要是通过<code>lazynvim-init.lua</code>中最后一句代码调用起效，<code>require(&quot;lazy&quot;).setup(&#123;&#125;)</code>，这里需要在setup中填入需要安装配置的插件，可直接在其中写入，也可通过目录方式独立写入每个插件</p>
+<ul>
+<li><p>方法一：直接配置</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> nvim_tree_plugin = &#123;</span><br><span class="line">    <span class="string">&quot;nvim-tree/nvim-tree.lua&quot;</span>,</span><br><span class="line">    version = <span class="string">&quot;*&quot;</span>,</span><br><span class="line">    dependencies = &#123;<span class="string">&quot;nvim-tree/nvim-web-devicons&quot;</span>&#125;,</span><br><span class="line">    <span class="built_in">config</span> = <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">        <span class="built_in">require</span>(<span class="string">&quot;nvim-tree&quot;</span>).setup &#123;&#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">local</span> lualine_plugin = &#123;</span><br><span class="line">    <span class="string">&#x27;nvim-lualine/lualine.nvim&#x27;</span>,</span><br><span class="line">    <span class="built_in">config</span> = <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">        <span class="built_in">require</span>(<span class="string">&#x27;lualine&#x27;</span>).setup()</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">local</span> treesitter_plugin=&#123;</span><br><span class="line">    <span class="string">&quot;nvim-treesitter/nvim-treesitter&quot;</span>,</span><br><span class="line">    <span class="built_in">config</span> = <span class="function"><span class="keyword">function</span><span class="params">(_, opts)</span></span></span><br><span class="line">        <span class="built_in">require</span>(<span class="string">&quot;nvim-treesitter.configs&quot;</span>).setup(opts)</span><br><span class="line">    <span class="keyword">end</span>,</span><br><span class="line">    opts = &#123;</span><br><span class="line">        ensure_installed = &#123; <span class="string">&quot;c&quot;</span>, <span class="string">&quot;lua&quot;</span>, <span class="string">&quot;ruby&quot;</span>, <span class="string">&quot;java&quot;</span> &#125;,</span><br><span class="line">  	highlight = &#123;</span><br><span class="line">    		enable = <span class="literal">true</span>,</span><br><span class="line">  	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">--主题设置未单独写出，直接写在配置项了，与插件并列</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&quot;lazy&quot;</span>).setup(&#123;nvim_tree_plugin, lualine_plugin,treesitter_plugin,</span><br><span class="line">    <span class="string">&quot;catppuccin/nvim&quot;</span>, name = <span class="string">&quot;catppuccin&quot;</span>, priority = <span class="number">1000</span></span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>上述方式下，我们首先定义了三个插件配置的table；然后，在setup中第一个参数table中，逐个添加插件。这样<code>lazy.nvim</code>就能帮我们将插件进行下载、安装。</p>
+</li>
+<li><p>方法二：<code>plugins</code>目录统一编排</p>
+<p>这种方式可以参考<code>lazyvim</code>项目，并且对<code>lazyvim</code>项目进行一些改造，避免加载过多项目</p>
+<ul>
+<li><p>首先在<code>lazynvim-init.lua</code>所在目录下创建一个<code>plugins</code>目录，用于存放插件配置<code>lua</code>代码</p>
+</li>
+<li><p>然后修改<code>lazynvim-init.lua</code>中最后一句代码，<code>require(&quot;lazy&quot;).setup(&#123;&#125;)</code>，改为<code>require(&quot;lazy&quot;).setup(&quot;plugins&quot;)</code>，注意没有了<code>&#123;&#125;</code>，直接在<code>()</code>中填写意为指示目录名</p>
+</li>
+<li><p>在<code>plugins</code>目录中创建插件配置模块<code>lua</code>脚本，按需创建，依次加入不影响前序配置文件</p>
+<p>以下给出几个实例</p>
+<p><strong><code>plugin-lualine.lua</code></strong></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&#x27;nvim-lualine/lualine.nvim&#x27;</span>,</span><br><span class="line">        <span class="built_in">config</span> = <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">            <span class="built_in">require</span>(<span class="string">&#x27;lualine&#x27;</span>).setup()</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>plugin-nvim-tree.lua</code></strong></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;nvim-tree/nvim-tree.lua&quot;</span>,</span><br><span class="line">        version = <span class="string">&quot;*&quot;</span>,</span><br><span class="line">        dependencies = &#123;<span class="string">&quot;nvim-tree/nvim-web-devicons&quot;</span>&#125;,</span><br><span class="line">        <span class="built_in">config</span> = <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">            <span class="built_in">require</span>(<span class="string">&quot;nvim-tree&quot;</span>).setup &#123;&#125;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>通过以上配置，就加载了三个最基础的插件，当然实际安装情况，需要运行<code>nvim</code>去检测，在<code>nvim</code>中输入<code>:Lazy</code>进入<code>lazy.nvim</code>插件管理器，输入I观察安装情况。对<code>github</code>的访问是否顺畅直接影响插件安装</p>
+</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>MERCARDER</span>
+                    </p>
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2024 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>惟精惟一，允执厥中</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/neovim/"># neovim</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2025/11/13/%E5%9C%B0%E7%90%83%E7%89%A9%E7%90%86%E7%9B%B8%E5%85%B3%E6%9C%9F%E5%88%8A%E6%8A%95%E7%A8%BF%E5%91%A8%E6%9C%9F/">地球物理相关期刊投稿周期</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© MERCARDER | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
