@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="MERCARDER">
+
+
+
+
+
+<title>claudecode国产大模型配置及切换操作指南 | MERCARDER&#39;s glog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">MERCARDER&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/About">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">MERCARDER&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/About">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">claudecode国产大模型配置及切换操作指南</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">MERCARDER</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 3, 2026&nbsp;&nbsp;22:07:44</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/">大模型</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>claudecode作为风头最劲的AI产品之一，其展现出的能力，让我感到通用Agent已经基本成型了。</p>
+<p>但是作为一款国外的产品，在国内使用还是很困难，Anthropic 公司封号严重，在这种状况下，国内厂商开始发力，将国产大模型接入claudecode，让用户在国内也能用上这个非常好用的工具，目前我用过的有</p>
+<p><a target="_blank" rel="noopener" href="https://docs.bigmodel.cn/cn/coding-plan/tool/claude">Claude Code - 智谱AI开放文档</a></p>
+<p><a target="_blank" rel="noopener" href="https://bailian.console.aliyun.com/cn-beijing/?spm=a2c4g.11186623.0.0.684a6889OIeOvJ&tab=doc#/doc/?type=model&url=3005961">大模型服务平台百炼控制台</a></p>
+<p>分别来自于智谱和阿里，智谱的GLM4.7推出coding plan跨年优惠后，一时之间洛阳纸贵，一票难求，智谱的codingplan可以按月度、季度、年度进行订阅，这一点比较好，优惠力度也大，这也是我第一个尝试使用的原因之一，其他厂商则仅提供了月度和年度套餐，包括阿里、火山、minimax等厂商，首月优惠后在10元以内，火山除了自己的豆包大模型也接入了其他的大模型，但是好像评价不佳，阿里的qwen一直以来都是霸榜的存在，因此选择了阿里。</p>
+<p>智谱在安装时，提供了一个安装小助手，其他家的则基本都是通过编辑或新增 <code>settings.json</code> 文件， MacOS &amp; Linux 为 <code>~/.claude/settings.json</code>， Windows 为<code>用户目录/.claude/settings.json</code>实现配置方式</p>
+<p>智谱的小助手应该也是生成这样一个文件，然后实现一些配置</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编辑或新增 `settings.json` 文件</span></span><br><span class="line"><span class="comment"># MacOS &amp; Linux 为 `~/.claude/settings.json`</span></span><br><span class="line"><span class="comment"># Windows 为`用户目录/.claude/settings.json`</span></span><br><span class="line"><span class="comment"># 新增或修改里面的 env 字段</span></span><br><span class="line"><span class="comment"># 注意替换里面的 `your_zhipu_api_key` 为您上一步获取到的 API Key</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;env&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;ANTHROPIC_AUTH_TOKEN&quot;</span>: <span class="string">&quot;your_zhipu_api_key&quot;</span>,</span><br><span class="line">    <span class="string">&quot;ANTHROPIC_BASE_URL&quot;</span>: <span class="string">&quot;https://open.bigmodel.cn/api/anthropic&quot;</span>,</span><br><span class="line">    <span class="string">&quot;API_TIMEOUT_MS&quot;</span>: <span class="string">&quot;3000000&quot;</span>,</span><br><span class="line">    <span class="string">&quot;CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC&quot;</span>: <span class="number">1</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 再编辑或新增 `.claude.json` 文件</span></span><br><span class="line"><span class="comment"># MacOS &amp; Linux 为 `~/.claude.json`</span></span><br><span class="line"><span class="comment"># Windows 为`用户目录/.claude.json`</span></span><br><span class="line"><span class="comment"># 新增 `hasCompletedOnboarding` 参数</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;hasCompletedOnboarding&quot;</span>: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>体验完事之后，感觉智谱的GLM4.7比较厉害一些，虽然最后也没达到我的目标，但是整个使用过程中展现的能力感觉比阿里的要强，也可能阿里的目前体验还不够多</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>MERCARDER</span>
+                    </p>
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2024 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>惟精惟一，允执厥中</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/"># 大模型</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2026/02/03/ubuntu24-04%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Qt5-15-2/">ubuntu24.04源码编译安装Qt5.15.2</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© MERCARDER | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
